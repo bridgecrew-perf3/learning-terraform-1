@@ -12,14 +12,9 @@ provider "docker" {
 }
 
 resource "random_string" "random" {
-  length = 4
-  upper = false
-  special = false
-}
-
-resource "random_string" "random2" {
-  length = 4
-  upper = false
+  count   = 2
+  length  = 4
+  upper   = false
   special = false
 }
 
@@ -28,7 +23,8 @@ resource "docker_image" "nodered_image" {
 }
 
 resource "docker_container" "nodered_container" {
-  name  = join("-",["nodered",random_string.random.result])
+  count = 2
+  name  = join("-", ["nodered", random_string.random[count.index].result])
   image = docker_image.nodered_image.latest
   ports {
     internal = 1880
@@ -36,38 +32,32 @@ resource "docker_container" "nodered_container" {
   }
 }
 
-resource "docker_container" "nodered_container2" {
-  name  = join("-",["nodered",random_string.random2.result])
-  image = docker_image.nodered_image.latest
-  ports {
-    internal = 1880
-    #external = 1880
-  }
-}
+# resource "docker_container" "nodered_container2" {
+#   name  = join("-",["nodered",random_string.random2.result])
+#   image = docker_image.nodered_image.latest
+#   ports {
+#     internal = 1880
+#     #external = 1880
+#   }
+# }
 
 output "Container_name" {
-  value       = docker_container.nodered_container.name
+  value       = docker_container.nodered_container[0].name
   description = "This is container name for nodered_container."
 }
 
 output "Container_name2" {
-  value       = docker_container.nodered_container2.name
+  value       = docker_container.nodered_container[1].name
   description = "This is container name for nodered_container2."
 }
 
-
-
-
-
-
-
 output "IP_address_nodered-container" {
-  value       = join(":", [docker_container.nodered_container.ip_address, docker_container.nodered_container.ports[0].external])
+  value       = join(":", [docker_container.nodered_container[0].ip_address, docker_container.nodered_container[0].ports[0].external])
   description = "This is an IP address and external port of the container."
 }
 
 output "IP_address_nodered-container2" {
-  value       = join(":", [docker_container.nodered_container2.ip_address, docker_container.nodered_container2.ports[0].external])
+  value       = join(":", [docker_container.nodered_container[1].ip_address, docker_container.nodered_container[1].ports[0].external])
   description = "This is an IP address and external port of the container."
 }
 
