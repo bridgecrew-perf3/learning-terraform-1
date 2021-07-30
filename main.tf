@@ -11,8 +11,23 @@ provider "docker" {
   host = "unix:///var/run/docker.sock"
 }
 
+variable "ext_port" {
+  type    = number
+  default = 1880
+}
+
+variable "int_port" {
+  type    = number
+  default = 1880
+}
+
+variable "count_num" {
+  type    = number
+  default = 1
+}
+
 resource "random_string" "random" {
-  count   = 1
+  count   = var.count_num
   length  = 4
   upper   = false
   special = false
@@ -23,12 +38,12 @@ resource "docker_image" "nodered_image" {
 }
 
 resource "docker_container" "nodered_container" {
-  count = 1
+  count = var.count_num
   name  = join("-", ["nodered", random_string.random[count.index].result])
   image = docker_image.nodered_image.latest
   ports {
-    internal = 1880
-    #external = 1880
+    internal = var.int_port
+    external = var.ext_port
   }
 }
 
