@@ -32,14 +32,10 @@ resource "docker_container" "nodered_container" {
   }
 }
 
-# resource "docker_container" "nodered_container2" {
-#   name  = join("-",["nodered",random_string.random2.result])
-#   image = docker_image.nodered_image.latest
-#   ports {
-#     internal = 1880
-#     #external = 1880
-#   }
-# }
+resource "docker_container" "nodered_container2" {
+  name  = "nodered-71xr"
+  image = docker_image.nodered_image.latest
+}
 
 output "Container_names" {
   value       = docker_container.nodered_container[*].name
