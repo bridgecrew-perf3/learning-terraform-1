@@ -32,10 +32,10 @@ resource "docker_container" "nodered_container" {
   }
 }
 
-resource "docker_container" "nodered_container2" {
-  name  = "nodered-71xr"
-  image = docker_image.nodered_image.latest
-}
+# resource "docker_container" "nodered_container2" {
+#   name  = "nodered-71xr"
+#   image = docker_image.nodered_image.latest
+# }
 
 output "Container_names" {
   value       = docker_container.nodered_container[*].name
