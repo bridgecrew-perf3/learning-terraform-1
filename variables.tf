@@ -1,10 +1,10 @@
 variable "ext_port" {
   type      = list
   # sensitive = true
-  # validation {
-  #   condition     = var.ext_port <= 65535 && var.ext_port > 0
-  #   error_message = "You have used invalid port, the external port must be a range 0 - 65535."
-  # }
+  validation {
+    condition     = max(var.ext_port...) <= 65535 && min(var.ext_port...) > 0
+    error_message = "You have used invalid port, the external port must be a range 0 - 65535."
+  }
 }
 
 variable "int_port" {
