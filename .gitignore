@@ -1,1 +1,3 @@
 *.tfvars
+.terraform/providers/registry.terraform.io/hashicorp/null/
+nodered_vol/*
