@@ -11,7 +11,7 @@ output "Container_names" {
 output "IP_address_of_the_containers" {
   value       = [for i in docker_container.nodered_container[*] : join(":", [i.ip_address], i.ports[*]["external"])]
   description = "This are containers IP addresses."
-  sensitive = true
+  sensitive   = true
 }
 
 # output "IP_address_nodered-container2" {
