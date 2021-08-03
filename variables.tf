@@ -1,5 +1,20 @@
+variable "env" {
+  type        = string
+  description = "environment to deploy to."
+  default     = "dev"
+}
+
+variable "image" {
+  type        = map(any)
+  description = "docker image"
+  default = {
+    "dev"  = "nodered/node-red:latest"
+    "prod" = "nodered/node-red:latest-minimal"
+  }
+}
+
 variable "ext_port" {
-  type      = list
+  type = list(any)
   # sensitive = true
   validation {
     condition     = max(var.ext_port...) <= 65535 && min(var.ext_port...) > 0
