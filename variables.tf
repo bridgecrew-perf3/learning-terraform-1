@@ -14,11 +14,16 @@ variable "image" {
 }
 
 variable "ext_port" {
-  type = list(any)
+  type = map
   # sensitive = true
   validation {
-    condition     = max(var.ext_port...) <= 65535 && min(var.ext_port...) > 0
-    error_message = "You have used invalid port, the external port must be a range 0 - 65535."
+    condition     = max(var.ext_port["dev"]...) <= 65535 && min(var.ext_port["dev"]...) >= 1980
+    error_message = "You have used invalid port, the external port must be a range 1980 - 65535."
+  }
+
+    validation {
+    condition     = max(var.ext_port["prod"]...) < 1980 && min(var.ext_port["prod"]...) >= 1880
+    error_message = "You have used invalid port, the external port must be a range 1880 - 1979."
   }
 }
 
@@ -32,5 +37,5 @@ variable "int_port" {
 }
 
 locals {
-  count_num = length(var.ext_port)
+  count_num = length(lookup(var.ext_port, var.env))
 }
