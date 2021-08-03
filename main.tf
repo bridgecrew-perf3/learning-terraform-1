@@ -19,7 +19,7 @@ resource "random_string" "random" {
 }
 
 resource "docker_image" "nodered_image" {
-  name = "nodered/node-red:latest"
+  name = lookup(var.image, var.env)
 }
 
 resource "null_resource" "dockervol" {
@@ -38,7 +38,7 @@ resource "docker_container" "nodered_container" {
   }
   volumes {
     container_path = "/data"
-    host_path = "${path.cwd}/nodered_vol"
+    host_path      = "${path.cwd}/nodered_vol"
   }
 }
 
